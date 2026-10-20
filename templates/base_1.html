@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-theme="lofi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rafael Castro Arquitetos{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-base-100">
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

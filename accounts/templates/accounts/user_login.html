@@ -1,0 +1,81 @@
+{% extends "base_1.html" %}
+
+{% block title %}Entrar | Rafael Castro Arquitetos{% endblock %}
+
+{% block content %}
+<div class="min-h-screen grid lg:grid-cols-2">
+
+  <!-- Painel da marca -->
+  <aside class="relative hidden lg:flex flex-col justify-between bg-neutral text-neutral-content p-12 overflow-hidden">
+    <svg class="absolute inset-0 w-full h-full opacity-10" aria-hidden="true">
+      <defs>
+        <pattern id="colmeia" width="56" height="97" patternUnits="userSpaceOnUse">
+          <path d="M28 0 L56 16 L56 48 L28 64 L0 48 L0 16 Z M28 64 L28 97" fill="none" stroke="currentColor" stroke-width="1"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#colmeia)"/>
+    </svg>
+
+    <p class="relative text-sm font-medium tracking-[0.35em] uppercase">
+      Rafael Castro <span class="font-light">Arquitetos</span>
+    </p>
+
+    <div class="relative space-y-6">
+      <h1 class="text-5xl font-light leading-tight">
+        Architecture<br>
+        <span class="font-medium">+</span> Biomimetics<br>
+        <span class="font-medium">+</span> Engineering
+      </h1>
+      <p class="text-neutral-content/70 max-w-sm">Award-winning brazilian architecture studio.</p>
+    </div>
+
+    <p class="relative text-xs tracking-widest uppercase text-neutral-content/50">Área restrita</p>
+  </aside>
+
+  <!-- Formulário -->
+  <main class="flex items-center justify-center p-6 sm:p-12">
+    <div class="w-full max-w-sm">
+      <p class="lg:hidden mb-10 text-sm font-medium tracking-[0.35em] uppercase text-center">
+        Rafael Castro <span class="font-light">Arquitetos</span>
+      </p>
+
+      <h2 class="text-3xl font-light">Entrar</h2>
+      <p class="mt-2 mb-8 text-sm text-base-content/60">Acesse sua conta para ver os projetos.</p>
+
+      <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div role="alert" class="alert alert-error rounded-none text-sm">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% for field in form %}
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend text-xs tracking-widest uppercase">{{ field.label }}</legend>
+            <input type="{{ field.field.widget.input_type }}"
+                   name="{{ field.html_name }}"
+                   id="{{ field.id_for_label }}"
+                   value="{{ field.value|default_if_none:'' }}"
+                   class="input w-full rounded-none {% if field.errors %}input-error{% endif %}"
+                   {% if field.field.required %}required{% endif %}>
+            {% for error in field.errors %}
+              <p class="text-error text-sm">{{ error }}</p>
+            {% endfor %}
+          </fieldset>
+        {% endfor %}
+
+        {% if next %}
+          <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <button type="submit" class="btn btn-neutral w-full rounded-none tracking-widest uppercase">Entrar</button>
+      </form>
+
+      <p class="mt-8 text-center text-sm text-base-content/60">
+        Não tem conta? <a href="{% url 'accounts:register' %}" class="link link-hover font-medium text-base-content">Cadastre-se</a>
+      </p>
+    </div>
+  </main>
+
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base_1.html" %}
+
+{% block title %}Registro de Usuário{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-base-200 p-4">
+  <div class="card w-full max-w-md bg-base-100 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title text-2xl justify-center mb-2">Registro de Usuário</h2>
+
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% for field in form %}
+          <fieldset class="fieldset">
+            <legend class="fieldset-legend">{{ field.label }}</legend>
+            <input type="{{ field.field.widget.input_type }}"
+                   name="{{ field.html_name }}"
+                   id="{{ field.id_for_label }}"
+                   value="{{ field.value|default_if_none:'' }}"
+                   class="input w-full {% if field.errors %}input-error{% endif %}"
+                   {% if field.field.required %}required{% endif %}>
+            {% for error in field.errors %}
+              <p class="text-error text-sm">{{ error }}</p>
+            {% endfor %}
+          </fieldset>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary w-full">Registrar</button>
+      </form>
+
+      <p class="text-center text-sm mt-2">
+        Já tem conta? <a href="{% url 'accounts:login' %}" class="link link-primary">Entrar</a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

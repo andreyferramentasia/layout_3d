@@ -1,0 +1,17 @@
+<!-- Modal carregado pelo HTMX: ao chegar na página abre; ao fechar, é removido -->
+<dialog class="modal"
+        hx-on:htmx:load="this.showModal()"
+        hx-on:close="this.remove()">
+  <div class="modal-box">
+    <h3 class="text-lg font-medium">Excluir projeto</h3>
+    <p class="py-4">Tem certeza que deseja excluir o projeto <strong>{{ project.name }}</strong>? Essa ação não pode ser desfeita.</p>
+
+    <form method="post" action="{% url 'projects3d:project-delete' project.pk %}" class="modal-action">
+      {% csrf_token %}
+      <button type="button" class="btn btn-ghost" onclick="this.closest('dialog').close()">Cancelar</button>
+      <button type="submit" class="btn btn-error">Sim, excluir</button>
+    </form>
+  </div>
+
+  <form method="dialog" class="modal-backdrop"><button>fechar</button></form>
+</dialog>

@@ -1,0 +1,67 @@
+{% extends "base_1.html" %}
+
+{% block title %}Projetos{% endblock %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
+
+{% include "partials/_nav_bar.html" %}
+
+<div class="max-w-6xl mx-auto p-6 sm:p-10">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <h1 class="text-3xl font-light">Projetos</h1>
+    <a href="{% url 'projects3d:project-create' %}" class="btn btn-neutral">Novo projeto</a>
+  </div>
+
+  <form method="get" class="flex gap-2 mb-8">
+    <input type="text" name="search" value="{{ request.GET.search|default:'' }}" placeholder="Buscar por nome" class="input w-full max-w-sm">
+    <button type="submit" class="btn">Buscar</button>
+    {% if request.GET.search %}
+      <a href="{% url 'projects3d:project-list' %}" class="btn btn-ghost">Limpar</a>
+    {% endif %}
+  </form>
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {% for project in projects %}
+      <div class="card bg-base-100 border border-base-300">
+        <div class="card-body">
+          <h2 class="card-title">{{ project.name }}</h2>
+          <p class="text-sm text-base-content/70">{{ project.description|default:"Sem descrição."|truncatewords:20 }}</p>
+
+          <div class="card-actions justify-end mt-4">
+            <a href="{% url 'projects3d:project-detail' project.pk %}" class="btn btn-sm btn-neutral">Ver 3D</a>
+
+            <button type="button" class="btn btn-sm"
+                    hx-get="{% url 'projects3d:project-update' project.pk %}"
+                    hx-target="body" hx-swap="beforeend">
+              Editar
+            </button>
+
+            <button type="button" class="btn btn-sm btn-error btn-outline"
+                    hx-get="{% url 'projects3d:project-delete' project.pk %}"
+                    hx-target="body" hx-swap="beforeend">
+              Excluir
+            </button>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p class="text-base-content/60">Nenhum projeto encontrado.</p>
+    {% endfor %}
+  </div>
+
+  {% if is_paginated %}
+    <div class="join mt-10 flex justify-center">
+      {% if page_obj.has_previous %}
+        <a href="{% querystring page=page_obj.previous_page_number %}" class="join-item btn">Anterior</a>
+      {% endif %}
+      <span class="join-item btn btn-disabled">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="{% querystring page=page_obj.next_page_number %}" class="join-item btn">Próxima</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>
+{% endblock %}

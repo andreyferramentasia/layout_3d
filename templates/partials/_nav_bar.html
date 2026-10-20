@@ -1,0 +1,17 @@
+<nav class="navbar border-b border-base-300 px-4 sm:px-8">
+  <div class="flex-1">
+    <a href="{% url 'projects3d:project-list' %}" class="text-sm font-medium tracking-[0.3em] uppercase">
+      Rafael Castro <span class="font-light">Arquitetos</span>
+    </a>
+  </div>
+
+  {% if user.is_authenticated %}
+    <div class="flex items-center gap-4">
+      <span class="text-sm text-base-content/70">Olá, {{ user.username }}</span>
+      <form method="post" action="{% url 'accounts:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-outline">Sair</button>
+      </form>
+    </div>
+  {% endif %}
+</nav>

@@ -1,0 +1,49 @@
+<!-- Modal carregado pelo HTMX: ao chegar na página abre; ao fechar, é removido -->
+<dialog class="modal"
+        hx-on:htmx:load="this.showModal()"
+        hx-on:close="this.remove()">
+  <div class="modal-box">
+    <h3 class="text-lg font-medium mb-4">Editar projeto</h3>
+
+    <form method="post" action="{% url 'projects3d:project-update' project.pk %}" enctype="multipart/form-data" class="space-y-4">
+      {% csrf_token %}
+
+      {% if form.non_field_errors %}
+        <div class="alert alert-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">{{ form.name.label }}</legend>
+        <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}"
+               value="{{ form.name.value|default_if_none:'' }}" maxlength="100" required
+               class="input w-full {% if form.name.errors %}input-error{% endif %}">
+        {% for error in form.name.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">{{ form.description.label }}</legend>
+        <textarea name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" rows="4"
+                  class="textarea w-full">{{ form.description.value|default_if_none:'' }}</textarea>
+        {% for error in form.description.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend class="fieldset-legend">{{ form.model_file.label }}</legend>
+        {% if project.model_file %}
+          <p class="text-sm text-base-content/70">Atual: {{ project.model_file.name }}</p>
+        {% endif %}
+        <input type="file" name="{{ form.model_file.html_name }}" id="{{ form.model_file.id_for_label }}"
+               accept=".glb,.gltf" class="file-input w-full">
+        <p class="label">Deixe vazio para manter o arquivo atual</p>
+        {% for error in form.model_file.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
+      </fieldset>
+
+      <div class="modal-action">
+        <button type="button" class="btn btn-ghost" onclick="this.closest('dialog').close()">Cancelar</button>
+        <button type="submit" class="btn btn-neutral">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <form method="dialog" class="modal-backdrop"><button>fechar</button></form>
+</dialog>

@@ -1,0 +1,90 @@
+{% extends "base_1.html" %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-6 sm:p-10">
+
+  <a href="{% url 'projects3d:project-list' %}" class="link link-hover text-sm">&larr; Voltar para projetos</a>
+  <h1 class="text-3xl font-light mt-4">{{ project.name }}</h1>
+  {% if project.description %}
+    <p class="mt-2 text-base-content/70">{{ project.description }}</p>
+  {% endif %}
+
+  <div id="viewer" data-model="{{ project.model_file.url }}"
+       class="relative w-full h-[70vh] mt-8 bg-base-200 border border-base-300">
+    <p id="viewer-status" class="absolute inset-0 flex items-center justify-center text-sm text-base-content/60">Carregando modelo...</p>
+  </div>
+  <p class="mt-2 text-xs text-base-content/50">Arraste para girar · Scroll para zoom · Botão direito para mover</p>
+
+</div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+  import * as THREE from 'three';
+  import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+  const el = document.getElementById('viewer');
+  const status = document.getElementById('viewer-status');
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf2f2f2);
+
+  const camera = new THREE.PerspectiveCamera(45, el.clientWidth / el.clientHeight, 0.1, 10000);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(el.clientWidth, el.clientHeight);
+  el.appendChild(renderer.domElement);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 2));
+  const sun = new THREE.DirectionalLight(0xffffff, 2);
+  sun.position.set(5, 10, 5);
+  scene.add(sun);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  new GLTFLoader().load(
+    el.dataset.model,
+    (gltf) => {
+      const model = gltf.scene;
+      scene.add(model);
+
+      // Enquadra a câmera no tamanho do modelo
+      const box = new THREE.Box3().setFromObject(model);
+      const size = box.getSize(new THREE.Vector3()).length();
+      const center = box.getCenter(new THREE.Vector3());
+      controls.target.copy(center);
+      camera.position.copy(center).add(new THREE.Vector3(size * 0.6, size * 0.4, size * 0.8));
+      camera.near = size / 100;
+      camera.far = size * 100;
+      camera.updateProjectionMatrix();
+
+      status.remove();
+    },
+    undefined,
+    () => { status.textContent = 'Não foi possível carregar o modelo 3D.'; }
+  );
+
+  window.addEventListener('resize', () => {
+    camera.aspect = el.clientWidth / el.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(el.clientWidth, el.clientHeight);
+  });
+
+  renderer.setAnimationLoop(() => {
+    controls.update();
+    renderer.render(scene, camera);
+  });
+</script>
+{% endblock %}
