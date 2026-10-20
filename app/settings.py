@@ -133,6 +133,8 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
+    BASE_DIR / "accounts" / "assets",
+    BASE_DIR / "projects3d" / "assets",
 ]
 
 MEDIA_URL = '/media/'

@@ -2,14 +2,15 @@
 <dialog class="modal"
         hx-on:htmx:load="this.showModal()"
         hx-on:close="this.remove()">
-  <div class="modal-box">
-    <h3 class="text-lg font-medium">Excluir projeto</h3>
-    <p class="py-4">Tem certeza que deseja excluir o projeto <strong>{{ project.name }}</strong>? Essa ação não pode ser desfeita.</p>
+  <div class="modal-box rounded-none bg-areia p-8 sm:p-10">
+    <p class="sobretitulo">Projeto</p>
+    <h3 class="font-serifa text-3xl mt-3">Excluir projeto</h3>
+    <p class="py-6 text-preto/70">Tem certeza que deseja excluir o projeto <strong class="text-preto">{{ project.name }}</strong>? Essa ação não pode ser desfeita.</p>
 
-    <form method="post" action="{% url 'projects3d:project-delete' project.pk %}" class="modal-action">
+    <form method="post" action="{% url 'projects3d:project-delete' project.pk %}" class="flex flex-wrap justify-end gap-4">
       {% csrf_token %}
-      <button type="button" class="btn btn-ghost" onclick="this.closest('dialog').close()">Cancelar</button>
-      <button type="submit" class="btn btn-error">Sim, excluir</button>
+      <button type="button" class="botao-linha" onclick="this.closest('dialog').close()">Cancelar</button>
+      <button type="submit" class="botao-perigo">Sim, excluir</button>
     </form>
   </div>
 

@@ -9,7 +9,7 @@ class ProjectListView(LoginRequiredMixin,ListView):
     model = Project
     template_name = 'projects3d/project_list.html'
     context_object_name = 'projects'
-    paginate_by = 10 
+    paginate_by = 9
 
     def get_queryset(self):
         queryset = super().get_queryset()

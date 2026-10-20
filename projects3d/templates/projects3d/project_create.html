@@ -1,49 +1,52 @@
 {% extends "base_1.html" %}
 
-{% block title %}Novo projeto{% endblock %}
+{% block title %}Novo projeto | Rafael Castro Arquitetos{% endblock %}
 
 {% block content %}
-<div class="max-w-xl mx-auto p-6 sm:p-10">
+{% include "partials/_nav_bar.html" %}
 
-  <a href="{% url 'projects3d:project-list' %}" class="link link-hover text-sm">&larr; Voltar para projetos</a>
-  <h1 class="text-3xl font-light mt-4 mb-8">Novo projeto</h1>
+<main class="max-w-xl mx-auto p-6 sm:p-10">
 
-  <form method="post" enctype="multipart/form-data" class="space-y-5">
+  <a href="{% url 'projects3d:project-list' %}" class="text-xs tracking-[0.3em] uppercase text-preto/60 hover:text-verde">&larr; Voltar para projetos</a>
+  <p class="sobretitulo mt-10">Área do cliente</p>
+  <h1 class="font-serifa text-4xl mt-3 mb-10">Novo projeto</h1>
+
+  <form method="post" enctype="multipart/form-data" class="space-y-7">
     {% csrf_token %}
 
     {% if form.non_field_errors %}
-      <div class="alert alert-error">{{ form.non_field_errors }}</div>
+      <div role="alert" class="alert alert-error rounded-none text-sm">{{ form.non_field_errors }}</div>
     {% endif %}
 
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend">{{ form.name.label }}</legend>
+    <div>
+      <label for="{{ form.name.id_for_label }}" class="rotulo">{{ form.name.label }}</label>
       <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}"
              value="{{ form.name.value|default_if_none:'' }}" maxlength="100" required
-             class="input w-full {% if form.name.errors %}input-error{% endif %}">
-      {% for error in form.name.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
-    </fieldset>
+             class="campo {% if form.name.errors %}erro{% endif %}">
+      {% for error in form.name.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
+    </div>
 
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend">{{ form.description.label }}</legend>
+    <div>
+      <label for="{{ form.description.id_for_label }}" class="rotulo">{{ form.description.label }}</label>
       <textarea name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" rows="4"
-                class="textarea w-full {% if form.description.errors %}textarea-error{% endif %}">{{ form.description.value|default_if_none:'' }}</textarea>
-      {% for error in form.description.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
-    </fieldset>
+                class="campo resize-y {% if form.description.errors %}erro{% endif %}">{{ form.description.value|default_if_none:'' }}</textarea>
+      {% for error in form.description.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
+    </div>
 
-    <fieldset class="fieldset">
-      <legend class="fieldset-legend">{{ form.model_file.label }}</legend>
+    <div>
+      <label for="{{ form.model_file.id_for_label }}" class="rotulo">{{ form.model_file.label }}</label>
       <input type="file" name="{{ form.model_file.html_name }}" id="{{ form.model_file.id_for_label }}"
              accept=".glb,.gltf" required
-             class="file-input w-full {% if form.model_file.errors %}file-input-error{% endif %}">
-      <p class="label">Arquivo .glb exportado do Rhino</p>
-      {% for error in form.model_file.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
-    </fieldset>
+             class="campo arquivo {% if form.model_file.errors %}erro{% endif %}">
+      <p class="mt-2 text-xs text-preto/50">Arquivo .glb exportado do Rhino</p>
+      {% for error in form.model_file.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
+    </div>
 
-    <div class="flex gap-2">
-      <button type="submit" class="btn btn-neutral">Salvar</button>
-      <a href="{% url 'projects3d:project-list' %}" class="btn btn-ghost">Cancelar</a>
+    <div class="flex flex-wrap gap-4 pt-3">
+      <button type="submit" class="botao">Salvar</button>
+      <a href="{% url 'projects3d:project-list' %}" class="botao-linha">Cancelar</a>
     </div>
   </form>
 
-</div>
+</main>
 {% endblock %}

@@ -2,45 +2,46 @@
 <dialog class="modal"
         hx-on:htmx:load="this.showModal()"
         hx-on:close="this.remove()">
-  <div class="modal-box">
-    <h3 class="text-lg font-medium mb-4">Editar projeto</h3>
+  <div class="modal-box rounded-none bg-areia p-8 sm:p-10">
+    <p class="sobretitulo">Projeto</p>
+    <h3 class="font-serifa text-3xl mt-3 mb-8">Editar projeto</h3>
 
-    <form method="post" action="{% url 'projects3d:project-update' project.pk %}" enctype="multipart/form-data" class="space-y-4">
+    <form method="post" action="{% url 'projects3d:project-update' project.pk %}" enctype="multipart/form-data" class="space-y-7">
       {% csrf_token %}
 
       {% if form.non_field_errors %}
-        <div class="alert alert-error">{{ form.non_field_errors }}</div>
+        <div role="alert" class="alert alert-error rounded-none text-sm">{{ form.non_field_errors }}</div>
       {% endif %}
 
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">{{ form.name.label }}</legend>
+      <div>
+        <label for="{{ form.name.id_for_label }}" class="rotulo">{{ form.name.label }}</label>
         <input type="text" name="{{ form.name.html_name }}" id="{{ form.name.id_for_label }}"
                value="{{ form.name.value|default_if_none:'' }}" maxlength="100" required
-               class="input w-full {% if form.name.errors %}input-error{% endif %}">
-        {% for error in form.name.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
-      </fieldset>
+               class="campo {% if form.name.errors %}erro{% endif %}">
+        {% for error in form.name.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
+      </div>
 
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">{{ form.description.label }}</legend>
+      <div>
+        <label for="{{ form.description.id_for_label }}" class="rotulo">{{ form.description.label }}</label>
         <textarea name="{{ form.description.html_name }}" id="{{ form.description.id_for_label }}" rows="4"
-                  class="textarea w-full">{{ form.description.value|default_if_none:'' }}</textarea>
-        {% for error in form.description.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
-      </fieldset>
+                  class="campo resize-y {% if form.description.errors %}erro{% endif %}">{{ form.description.value|default_if_none:'' }}</textarea>
+        {% for error in form.description.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
+      </div>
 
-      <fieldset class="fieldset">
-        <legend class="fieldset-legend">{{ form.model_file.label }}</legend>
+      <div>
+        <label for="{{ form.model_file.id_for_label }}" class="rotulo">{{ form.model_file.label }}</label>
         {% if project.model_file %}
-          <p class="text-sm text-base-content/70">Atual: {{ project.model_file.name }}</p>
+          <p class="mt-1 text-xs text-preto/60 break-all">Atual: {{ project.model_file.name }}</p>
         {% endif %}
         <input type="file" name="{{ form.model_file.html_name }}" id="{{ form.model_file.id_for_label }}"
-               accept=".glb,.gltf" class="file-input w-full">
-        <p class="label">Deixe vazio para manter o arquivo atual</p>
-        {% for error in form.model_file.errors %}<p class="text-error text-sm">{{ error }}</p>{% endfor %}
-      </fieldset>
+               accept=".glb,.gltf" class="campo arquivo {% if form.model_file.errors %}erro{% endif %}">
+        <p class="mt-2 text-xs text-preto/50">Deixe vazio para manter o arquivo atual</p>
+        {% for error in form.model_file.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
+      </div>
 
-      <div class="modal-action">
-        <button type="button" class="btn btn-ghost" onclick="this.closest('dialog').close()">Cancelar</button>
-        <button type="submit" class="btn btn-neutral">Salvar</button>
+      <div class="flex flex-wrap justify-end gap-4 pt-3">
+        <button type="button" class="botao-linha" onclick="this.closest('dialog').close()">Cancelar</button>
+        <button type="submit" class="botao">Salvar</button>
       </div>
     </form>
   </div>

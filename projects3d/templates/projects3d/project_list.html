@@ -1,67 +1,71 @@
 {% extends "base_1.html" %}
 
-{% block title %}Projetos{% endblock %}
+{% block title %}Projetos | Rafael Castro Arquitetos{% endblock %}
 
 {% block content %}
 <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.4/dist/htmx.min.js"></script>
 
 {% include "partials/_nav_bar.html" %}
 
-<div class="max-w-6xl mx-auto p-6 sm:p-10">
+<main class="max-w-6xl mx-auto p-6 sm:p-10">
 
-  <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
-    <h1 class="text-3xl font-light">Projetos</h1>
-    <a href="{% url 'projects3d:project-create' %}" class="btn btn-neutral">Novo projeto</a>
+  <div class="flex flex-wrap items-end justify-between gap-6 mb-10">
+    <div>
+      <p class="sobretitulo">Área do cliente</p>
+      <h1 class="font-serifa text-4xl mt-3">Projetos</h1>
+    </div>
+    <a href="{% url 'projects3d:project-create' %}" class="botao">Novo projeto</a>
   </div>
 
-  <form method="get" class="flex gap-2 mb-8">
-    <input type="text" name="search" value="{{ request.GET.search|default:'' }}" placeholder="Buscar por nome" class="input w-full max-w-sm">
-    <button type="submit" class="btn">Buscar</button>
+  <form method="get" class="flex items-end gap-6 mb-12 max-w-lg">
+    <div class="flex-1">
+      <label for="busca" class="rotulo">Buscar por nome</label>
+      <input type="text" id="busca" name="search" value="{{ request.GET.search|default:'' }}" class="campo">
+    </div>
+    <button type="submit" class="text-xs tracking-[0.3em] uppercase pb-3 cursor-pointer hover:text-verde">Buscar</button>
     {% if request.GET.search %}
-      <a href="{% url 'projects3d:project-list' %}" class="btn btn-ghost">Limpar</a>
+      <a href="{% url 'projects3d:project-list' %}" class="text-xs tracking-[0.3em] uppercase pb-3 text-preto/50 hover:text-verde">Limpar</a>
     {% endif %}
   </form>
 
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
     {% for project in projects %}
-      <div class="card bg-base-100 border border-base-300">
-        <div class="card-body">
-          <h2 class="card-title">{{ project.name }}</h2>
-          <p class="text-sm text-base-content/70">{{ project.description|default:"Sem descrição."|truncatewords:20 }}</p>
+      <article class="flex flex-col bg-white/60 border border-preto/10 p-6 transition-colors hover:border-verde/40">
+        <h2 class="font-serifa text-2xl">{{ project.name }}</h2>
+        <p class="mt-3 flex-1 text-sm text-preto/60">{{ project.description|default:"Sem descrição."|truncatewords:20 }}</p>
 
-          <div class="card-actions justify-end mt-4">
-            <a href="{% url 'projects3d:project-detail' project.pk %}" class="btn btn-sm btn-neutral">Ver 3D</a>
+        <div class="flex flex-wrap items-center gap-4 mt-6 pt-5 border-t border-preto/10">
+          <a href="{% url 'projects3d:project-detail' project.pk %}" class="botao botao-sm">Ver 3D</a>
 
-            <button type="button" class="btn btn-sm"
-                    hx-get="{% url 'projects3d:project-update' project.pk %}"
-                    hx-target="body" hx-swap="beforeend">
-              Editar
-            </button>
+          <button type="button" class="text-xs tracking-[0.25em] uppercase cursor-pointer hover:text-verde"
+                  hx-get="{% url 'projects3d:project-update' project.pk %}"
+                  hx-target="body" hx-swap="beforeend">
+            Editar
+          </button>
 
-            <button type="button" class="btn btn-sm btn-error btn-outline"
-                    hx-get="{% url 'projects3d:project-delete' project.pk %}"
-                    hx-target="body" hx-swap="beforeend">
-              Excluir
-            </button>
-          </div>
+          <button type="button" class="ml-auto text-xs tracking-[0.25em] uppercase text-[var(--color-error)] cursor-pointer hover:underline underline-offset-4"
+                  hx-get="{% url 'projects3d:project-delete' project.pk %}"
+                  hx-target="body" hx-swap="beforeend">
+            Excluir
+          </button>
         </div>
-      </div>
+      </article>
     {% empty %}
-      <p class="text-base-content/60">Nenhum projeto encontrado.</p>
+      <p class="text-preto/60">Nenhum projeto encontrado.</p>
     {% endfor %}
   </div>
 
   {% if is_paginated %}
-    <div class="join mt-10 flex justify-center">
+    <nav class="flex items-center justify-center gap-8 mt-12 text-xs tracking-[0.3em] uppercase">
       {% if page_obj.has_previous %}
-        <a href="{% querystring page=page_obj.previous_page_number %}" class="join-item btn">Anterior</a>
+        <a href="{% querystring page=page_obj.previous_page_number %}" class="hover:text-verde">&larr; Anterior</a>
       {% endif %}
-      <span class="join-item btn btn-disabled">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      <span class="text-preto/50">Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
       {% if page_obj.has_next %}
-        <a href="{% querystring page=page_obj.next_page_number %}" class="join-item btn">Próxima</a>
+        <a href="{% querystring page=page_obj.next_page_number %}" class="hover:text-verde">Próxima &rarr;</a>
       {% endif %}
-    </div>
+    </nav>
   {% endif %}
 
-</div>
+</main>
 {% endblock %}

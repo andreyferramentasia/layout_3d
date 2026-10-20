@@ -1,21 +1,66 @@
 <!DOCTYPE html>
-<html lang="pt-br" data-theme="lofi">
+<html lang="pt-br" data-theme="lofi" class="bg-areia">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Rafael Castro Arquitetos{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style type="text/tailwindcss">
         @theme {
             --font-sans: "Jost", ui-sans-serif, system-ui, sans-serif;
+            --font-serifa: "DM Serif Display", ui-serif, Georgia, serif;
+            --color-areia: #f6f2ec;
+            --color-verde: #1f3a2e;
+            --color-preto: #141414;        }
+
+        /* Grão leve sobre a página, como papel de prancha ou concreto */
+        .textura::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 40;
+            pointer-events: none;
+            opacity: 0.22;
+            mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+        }
+
+        /* Peças visuais do escritório, usadas em todas as telas */
+        @layer components {
+            .sobretitulo { @apply text-xs tracking-[0.35em] uppercase text-verde; }
+            .rotulo { @apply block text-[0.7rem] tracking-[0.25em] uppercase text-preto/60; }
+
+            .campo {
+                @apply w-full py-2.5 bg-transparent border-0 border-b border-preto/25 transition-colors;
+                @apply focus:outline-none focus:border-verde;
+            }
+            .campo.erro { @apply border-[var(--color-error)]; }
+            .campo.arquivo {
+                @apply text-sm file:mr-4 file:px-4 file:py-2 file:border-0 file:bg-preto file:text-white;
+                @apply file:text-xs file:tracking-[0.25em] file:uppercase file:cursor-pointer hover:file:bg-verde;
+            }
+
+            .botao {
+                @apply inline-flex items-center justify-center gap-2 px-6 py-4 bg-preto text-white;
+                @apply text-sm tracking-[0.3em] uppercase transition-colors cursor-pointer hover:bg-verde;
+            }
+            .botao-sm { @apply px-4 py-2.5 text-xs tracking-[0.25em]; }
+            .botao-linha {
+                @apply inline-flex items-center justify-center gap-2 px-6 py-4 border border-preto text-preto;
+                @apply text-sm tracking-[0.3em] uppercase transition-colors cursor-pointer hover:bg-preto hover:text-white;
+            }
+            .botao-perigo {
+                @apply inline-flex items-center justify-center gap-2 px-6 py-4 border border-[var(--color-error)] text-[var(--color-error)];
+                @apply text-sm tracking-[0.3em] uppercase transition-colors cursor-pointer hover:bg-[var(--color-error)] hover:text-white;
+            }
         }
     </style>
 </head>
-<body class="font-sans antialiased bg-base-100">
+<body class="textura min-h-screen font-sans antialiased bg-areia text-preto">
     {% block content %}
     {% endblock %}
 </body>
