@@ -40,7 +40,7 @@
           </label>
         {% endif %}
         <input type="file" name="{{ form.model_file.html_name }}" id="{{ form.model_file.id_for_label }}"
-               accept=".glb,.gltf" class="campo arquivo {% if form.model_file.errors %}erro{% endif %}">
+               accept=".glb,.gltf,.3dm" class="campo arquivo {% if form.model_file.errors %}erro{% endif %}">
         <p class="mt-2 text-xs text-preto/50">Deixe vazio para manter o arquivo atual</p>
         {% for error in form.model_file.errors %}<p class="mt-1 text-error text-xs">{{ error }}</p>{% endfor %}
       </div>

@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { Rhino3dmLoader } from 'three/addons/loaders/3DMLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const el = document.getElementById('viewer');
@@ -24,10 +25,22 @@ scene.add(sun);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 
-new GLTFLoader().load(
+// .3dm (Rhino) precisa da biblioteca rhino3dm; o resto segue como glTF/GLB
+const isRhino = new URL(el.dataset.model, location.href).pathname.toLowerCase().endsWith('.3dm');
+let loader;
+if (isRhino) {
+  loader = new Rhino3dmLoader();
+  loader.setLibraryPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/rhino3dm/');
+} else {
+  loader = new GLTFLoader();
+}
+
+loader.load(
   el.dataset.model,
-  (gltf) => {
-    const model = gltf.scene;
+  (result) => {
+    const model = isRhino ? result : result.scene;
+    // No Rhino o eixo para cima é o Z; no Three.js é o Y
+    if (isRhino) model.rotation.x = -Math.PI / 2;
     scene.add(model);
 
     // Enquadra a câmera no tamanho do modelo
