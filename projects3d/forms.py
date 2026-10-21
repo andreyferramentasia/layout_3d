@@ -6,6 +6,7 @@ class ProjectCreateForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ['name', 'description', 'model_file']
+ 
 
 
 class ProjectUpdateForm(forms.ModelForm):

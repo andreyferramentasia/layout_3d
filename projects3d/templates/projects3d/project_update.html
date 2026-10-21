@@ -32,6 +32,12 @@
         <label for="{{ form.model_file.id_for_label }}" class="rotulo">{{ form.model_file.label }}</label>
         {% if project.model_file %}
           <p class="mt-1 text-xs text-preto/60 break-all">Atual: {{ project.model_file.name }}</p>
+          <!-- O Django apaga o vínculo quando recebe "<campo>-clear" marcado -->
+          <label class="mt-2 inline-flex items-center gap-2 text-xs text-preto/60 cursor-pointer">
+            <input type="checkbox" name="{{ form.model_file.html_name }}-clear" id="{{ form.model_file.id_for_label }}-clear"
+                   class="checkbox checkbox-xs rounded-none">
+            Remover arquivo atual
+          </label>
         {% endif %}
         <input type="file" name="{{ form.model_file.html_name }}" id="{{ form.model_file.id_for_label }}"
                accept=".glb,.gltf" class="campo arquivo {% if form.model_file.errors %}erro{% endif %}">
