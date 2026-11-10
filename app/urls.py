@@ -18,13 +18,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-
+from accounts.views import LandingPageView
 
 from app import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('', LandingPageView.as_view(), name='landing_page'),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('projects3d/', include('projects3d.urls', namespace='projects3d')),
 ]

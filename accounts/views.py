@@ -1,11 +1,15 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
+from django.views.generic import TemplateView
 from django.views.generic import CreateView
 from accounts.forms import CustomUserCreationForm
 
 # Create your views here.
 
+class LandingPageView(TemplateView):
+    template_name = 'accounts/landing_page.html'
 
+    
 class UserLoginView(LoginView):
     template_name = 'accounts/user_login.html'
     redirect_authenticated_user = True
