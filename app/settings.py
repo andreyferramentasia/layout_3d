@@ -25,8 +25,10 @@ SECRET_KEY = 'django-insecure-m5nbu1$xk--ly(&686*q4*n(cn=_b8&w$kno^2h=feov_o-)d@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://*.trycloudflare.com",
+]
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -136,3 +138,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'projects3d:project-list'
 LOGOUT_REDIRECT_URL = 'accounts:login'
+
+
+
